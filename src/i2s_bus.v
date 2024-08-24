@@ -1,4 +1,4 @@
-// `include "mux_shift.v"
+`include "mux_shift.v"
 module i2s_bus(
     input wire clk,
     input wire rst,
@@ -8,8 +8,8 @@ module i2s_bus(
 ); 
 
     wire [31:0] mux_outputs; 
-
-
+    reg [7:0] counter;   
+    reg dec_clk=0;
     genvar i;
     generate
         
@@ -17,7 +17,7 @@ module i2s_bus(
         mux_shift u_mux_shift ( 
                 .clk(clk),
                 .rst(rst),
-                .lr_clk(lr_clk),
+                .lr_clk(dec_clk),
                 .last_shift(1'b0),
                 .sum_res(bit_data[0]),
                 .out(mux_outputs[0]) 
@@ -26,13 +26,27 @@ module i2s_bus(
             mux_shift u_mux_shift (
                 .clk(clk),
                 .rst(rst),
-                .lr_clk(lr_clk),
+                .lr_clk(dec_clk),
                 .last_shift(mux_outputs[i-1]),
                 .sum_res(bit_data[i]),
                 .out(mux_outputs[i]) 
             );
         end
     endgenerate 
+    always @(posedge clk or posedge rst) begin
+         if (rst) begin
+            counter <= 8'b0;
+            out <= 1'b0;
+            dec_clk <= 1'b0;
+        end else begin
+            counter <= counter + 1;
+            if (counter >= 64) begin
+                counter <= 8'b0;
+                
+                dec_clk <= ~dec_clk;
+            end
+        end
+    end
     always @(negedge clk) begin
         if (rst)
             out <= 1'b0;

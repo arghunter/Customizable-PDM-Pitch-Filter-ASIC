@@ -1,5 +1,5 @@
 module filter #(
-    parameter MAX_LENGTH = 255 
+    parameter MAX_LENGTH = 255
 )(
     input wire clk,            // System clock
     input wire rst,            // Reset signal
@@ -8,27 +8,19 @@ module filter #(
     output reg [7:0] sum       // Output sum
 );
 
-
-    reg shift_reg [0:MAX_LENGTH-1];
+    reg [MAX_LENGTH-1:0] shift_reg;
 
     integer i;
-
+    
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            
             sum <= 8'b0;
-            for (i = 0; i < MAX_LENGTH; i = i + 1) begin
-                shift_reg[i] <= 1'b0;
-            end
+            shift_reg <= {MAX_LENGTH{1'b0}};
         end else begin
-           
-            shift_reg[0] <= data;
-            sum <= sum - shift_reg[length-1] + data;
-
-            
-            for (i = 1; i < MAX_LENGTH; i = i + 1) begin
-                shift_reg[i] <= shift_reg[i-1];
+            if (length > 0) begin
+                sum <= sum - shift_reg[length-1] + data;
             end
+            shift_reg <= {shift_reg[MAX_LENGTH-2:0], data};
         end
     end
 endmodule

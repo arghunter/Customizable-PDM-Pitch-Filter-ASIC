@@ -20,7 +20,7 @@ module memory #(
         if (!rst_n) begin
             for (i = 0; i < NUM_ADDRESSES; i = i + 1) begin
                 memory[i] <= 8'b0;
-                length[i] <= 8'b0; // Initialize lengths to zero
+                // length[i] <= 8'b0; // Initialize lengths to zero
             end
         end else if (wr_en) begin
             memory[addr] <= data_in;

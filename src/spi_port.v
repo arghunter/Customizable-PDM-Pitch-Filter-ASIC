@@ -5,14 +5,15 @@ module spi_port (
     input wire spi_mosi,         // Master Out Slave In
     output wire spi_miso,        // Master In Slave Out (Not implemented)
     input wire spi_cs_n,         // Chip Select (active-low)
-    output reg [15:0] capture_reg // 16-bit data capture register
+    output reg [15:0] capture_reg
+    
 );
 
     reg [15:0] shift_reg;         // 16-bit shift register for incoming data
     reg cs_n_prev;                // Previous state of CS
 
     always @(posedge clk or negedge rst_n) begin
-        if (rst_n) begin
+        if (!rst_n) begin
             shift_reg <= 16'b0;
             capture_reg <= 16'b0;
             cs_n_prev <= 1'b1;

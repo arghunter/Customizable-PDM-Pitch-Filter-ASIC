@@ -1,3 +1,10 @@
+`include "spi_port.v"
+`include "memory.v"
+`include "demux.v"
+`include "decimator.v"
+`include "filter.v"
+`include "i2s_bus.v"
+
 module top_module(
     input wire clk,
     input wire rst,
@@ -10,14 +17,18 @@ module top_module(
 );
 wire [7:0] addr;
 wire [7:0] value;
-wire wr_en;
-wire rd_en'
+wire wr_en = 1;
+wire rd_en = 1;
 wire [7:0] mem_out;
-wire [7:0] decimation ratio;
+wire [7:0] decimation_ratio;
 wire dec_data;
 wire dec_clk;
-wire [7:0]filter_length;
-wire [7:0] filter out;
+wire [7:0] filter_length;
+wire [7:0] filter_out;
+wire [15:0] capture_reg;
+wire dummy;
+assign addr = capture_reg[15:8];
+assign value = capture_reg[7:0];
 generate 
 
     spi_port u_spi_port(
@@ -25,10 +36,9 @@ generate
         .rst_n(!rst),
         .spi_clk(spi_clk),
         .spi_mosi(spi_mosi),
-        .spi_miso(1'b0),
+        .spi_miso(dummy),
         .spi_cs_n(spi_cs_n),
-        .capture_reg[7:0](addr),
-        .capture_reg[15:8](value)
+        .capture_reg(capture_reg)
     );
     memory u_memory(
         .clk(clk),            
@@ -37,7 +47,7 @@ generate
         .data_in(value),  
         .wr_en(wr_en),          
         .rd_en(rd_en),          
-        .data_out(mem_out), 
+        .data_out(mem_out) 
     );
     demux1to2 u_demux1to2(
         .sel(addr),
