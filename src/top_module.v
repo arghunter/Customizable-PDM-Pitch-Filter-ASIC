@@ -1,9 +1,9 @@
-`include "spi_port.v"
-`include "memory.v"
-`include "demux.v"
-`include "decimator.v"
-`include "filter.v"
-`include "i2s_bus.v"
+// `include "spi_port.v"
+// `include "memory.v"
+// `include "demux.v"
+// `include "decimator.v"
+// `include "filter.v"
+// `include "i2s_bus.v"
 
 module top_module(
     input wire clk,
@@ -29,7 +29,7 @@ wire [15:0] capture_reg;
 wire dummy;
 assign addr = capture_reg[15:8];
 assign value = capture_reg[7:0];
-generate 
+assign mic_clk = clk;
 
     spi_port u_spi_port(
         .clk(clk),
@@ -77,7 +77,7 @@ generate
         .bit_data(filter_out),
         .out(out)
     );
-endgenerate
+
 
 
 

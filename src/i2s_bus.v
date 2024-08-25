@@ -1,4 +1,4 @@
-`include "mux_shift.v"
+// `include "mux_shift.v"
 module i2s_bus(
     input wire clk,
     input wire rst,
@@ -6,7 +6,13 @@ module i2s_bus(
     input wire [31:0] bit_data,
     output reg out
 ); 
-
+    // "dir::demux.v",
+    // "dir::filter.v",
+    // "dir::memory.v",
+    // "dir::spi_port.v",
+    // "dir::mux_shift.v",
+    // "dir::i2s_bus.v",
+    // "dir::top_module.v"
     wire [31:0] mux_outputs; 
     reg [7:0] counter;   
     reg dec_clk=0;
@@ -36,7 +42,6 @@ module i2s_bus(
     always @(posedge clk or posedge rst) begin
          if (rst) begin
             counter <= 8'b0;
-            out <= 1'b0;
             dec_clk <= 1'b0;
         end else begin
             counter <= counter + 1;
