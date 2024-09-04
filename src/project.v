@@ -23,7 +23,7 @@ wire rst;
   assign uo_out[7:2] = 0;
   assign rst = !rst_n;
   generate
-    supermic_top_module u_supermic_top_module (
+    top_module u_top_module (
         .clk(ui_in[0]),
         .rst(rst),
         .spi_mosi(ui_in[1]),
