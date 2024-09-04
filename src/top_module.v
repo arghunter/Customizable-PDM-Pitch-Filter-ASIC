@@ -8,7 +8,6 @@
 module top_module(
     input wire clk,
     input wire rst,
-    input wire spi_clk,
     input wire spi_mosi,
     input wire spi_cs_n,
     input wire mic_data,
@@ -34,7 +33,7 @@ assign mic_clk = clk;
     spi_port u_spi_port(
         .clk(clk),
         .rst_n(!rst),
-        .spi_clk(spi_clk),
+        .spi_clk(clk),
         .spi_mosi(spi_mosi),
         .spi_miso(dummy),
         .spi_cs_n(spi_cs_n),
