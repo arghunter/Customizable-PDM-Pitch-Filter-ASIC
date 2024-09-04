@@ -17,7 +17,6 @@ wire mic_clk;
 top_module u_top_module (
     .clk(clk),
     .rst(reset),
-    .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_cs_n(spi_cs_n),
     .mic_data(mic_data),
@@ -37,11 +36,7 @@ initial begin
     forever #10416.67 dec_clk = ~dec_clk; // Half period = 1 / (2 * 48 kHz) = 10416.67 ns
 end
 
-// SPI clock generation
-initial begin
-    spi_clk = 0;
-    forever #162.76 spi_clk = ~spi_clk; // 25 MHz clock
-end
+
 
 // Memory to store input data
 reg input_data [0:262143]; // Adjust the size based on your input data length
